@@ -2,6 +2,8 @@ name: "Deploy iOS XCFramework"
 
 on:
   workflow_dispatch:
+  push:
+    branches: ["main"]
 
 env:
   SDK_NAME: "AppPackage"
@@ -62,6 +64,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set Stored File URL
+        id: set_stored_file_url
+        run: |
+          fileUrl="https://github.com/${{ github.repository }}/releases/download/${{ github.event.inputs.release_tag }}/"
+          echo "FILE_URL=$fileUrl" >> "${GITHUB_OUTPUT}"
+
       - name: Create Package.swift
         working-directory: ${{ env.OUTPUT_PATH }}
         run: |
@@ -81,13 +89,11 @@ jobs:
           PACKAGE_TARGETS=$(echo $PACKAGE_TARGETS | sed -e 's/,/,\
           /g')
 
-          fileUrl="https://github.com/Atsumi3/Flutter-Deploy-XCFramework/releases/download/${{ github.event.inputs.release_tag }}/"
-
           # Package.swiftのtargetsに入れる内容
           PACKAGE_BINARY_TARGETS=()
           for file in "${assetsFiles[@]}"; do
             FILENAME_WITHOUT_EXT=$(echo $file | sed -e 's/.xcframework.zip//g')
-            URL="$fileUrl$file"
+            URL="${{ steps.set_stored_file_url.outputs.FILE_URL }}$file"
             CHECKSUM=$(shasum -a 256 $file | sed -e 's/ .*//g')
             BINARY_TARGET=$(cat <<EOF
 
