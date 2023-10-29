@@ -150,6 +150,7 @@ jobs:
           # ${{ steps.release_tag.outputs.RELEASE_TAG }} のスペースを_に置換
           release_tag=$(echo "${{ steps.release_tag.outputs.RELEASE_TAG }}" | sed -e 's/ /_/g')
           git switch -c bot/$release_tag
+          git push -u origin bot/$release_tag
 
       - name: Check PullRequest Exists
         id: check_pr
