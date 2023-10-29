@@ -46,7 +46,8 @@ jobs:
               files_commna+=("$currentDir/$file")
           done
           # カンマ区切り
-          echo "ZIPFILES=${files_commna[*]}" >> "${GITHUB_OUTPUT}"
+          files_commna=$(IFS=,; echo "${files_commna[*]}")
+          echo "ZIPFILES=$files_commna" >> "${GITHUB_OUTPUT}"
 
       - name: Release
         uses: softprops/action-gh-release@v1
