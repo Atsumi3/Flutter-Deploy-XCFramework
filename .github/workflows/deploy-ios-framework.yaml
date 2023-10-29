@@ -8,6 +8,7 @@ on:
 env:
   SDK_NAME: "AppPackage"
   OUTPUT_PATH: ${{ github.workspace }}/ios-framework
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   deploy-ios-xcframework:
@@ -132,10 +133,33 @@ jobs:
           EOF
           )
 
-          echo "$packageSwift" > Package.swift
+          echo "$packageSwift" > ${{github.workspace}}/Package.swift
 
-      - name: Save Package.swift
-        uses: actions/upload-artifact@v2
-        with:
-          name: Package.swift
-          path: ${{ env.OUTPUT_PATH }}/Package.swift
+      - name: Check PullRequest Exists
+        id: check_pr
+        env:
+          HEAD_MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          COMMIT_MESSAGE=$(echo "${HEAD_MESSAGE}" | sed -n -e 1p)
+          echo "message=${COMMIT_MESSAGE}" >> "$GITHUB_OUTPUT"
+          echo "count=$(gh pr list -S 'Update Pacakge.swift'in:title | wc -l)" >> "$GITHUB_OUTPUT"
+
+      - name: Create Release Pull Request
+        if: ${{ steps.check_pr.outputs.count == 0 }}
+        run: |
+          gh pr create \
+            -B main \
+            -t 'Update Pacakge.swift ${{ steps.check_pr.outputs.message }}' \
+            -a ${{ github.actor }}  \
+            --body-file ./.github/RELEASE_WORKFLOW_TEMPLATE.md
+
+      - name: Edit Release Pull Request
+        if: ${{ steps.check_pr.outputs.count != 0 }}
+        run: |
+          pr_data=$(gh pr list -S 'Update Pacakge.swift'in:title \
+            --json "title" \
+            | jq -c .[])
+          TITLE="$(echo $pr_data | jq -r '.title')"
+          echo $TITLE
+          gh pr edit  ${{ github.ref_name }} \
+            -t "${TITLE} / ${{ steps.check_pr.outputs.message }}"
