@@ -46,20 +46,21 @@ jobs:
               zipFiles="$zipFiles $currentDir/$file"
           done
           zipFiles=$(echo $zipFiles | sed 's/ /\\n/g')
-          echo "ZIPFILES_NL=$zipFiles" >> "$GITHUB_OUTPUT"
+          echo "ZIPFILES_NL=$zipFiles"
+          # >> "$GITHUB_OUTPUT"
 
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        id: create_release
-        with:
-          name: ${{ github.event.inputs.release_tag }}
-          tag_name: ${{ github.ref }}
-          draft: false
-          prerelease: false
-          files: |
-            ${{ steps.extract_zip_file_lists.outputs.ZIPFILES_NL }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Release
+      #   uses: softprops/action-gh-release@v1
+      #   id: create_release
+      #   with:
+      #     name: ${{ github.event.inputs.release_tag }}
+      #     tag_name: ${{ github.ref }}
+      #     draft: false
+      #     prerelease: false
+      #     files: |
+      #       ${{ steps.extract_zip_file_lists.outputs.ZIPFILES_NL }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     #   - name: Commit & Push & Pull Request
     #     uses: EndBug/add-and-commit@v7
