@@ -40,13 +40,13 @@ jobs:
         run: |
           currentDir=$(pwd)
           currentZipFiles=$(ls *.zip)
-          zipFiles=""
+          delimiter="$(openssl rand -hex 8)"
+          echo "ZIPFILES_NL<<${delimiter}" >> "${GITHUB_OUTPUT}"
           for file in $currentZipFiles
           do
-              zipFiles="$zipFiles $currentDir/$file"
+              echo "$currentDir/$file\n" >> "${GITHUB_OUTPUT}"
           done
-          zipFiles=$(echo $zipFiles | sed 's/ /\\n/g')
-          echo "ZIPFILES_NL=$zipFiles" >> $GITHUB_OUTPUT
+          echo "${delimiter}" >> "${GITHUB_OUTPUT}"
 
       - name: Release
         uses: softprops/action-gh-release@v1
