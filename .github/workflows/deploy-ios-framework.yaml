@@ -2,8 +2,6 @@ name: "Deploy iOS XCFramework"
 
 on:
   workflow_dispatch:
-  push:
-    branches: ["main"]
 
 env:
   SDK_NAME: "AppPackage"
