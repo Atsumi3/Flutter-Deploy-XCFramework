@@ -44,7 +44,7 @@ jobs:
           echo "ZIPFILES_NL<<${delimiter}" >> "${GITHUB_OUTPUT}"
           for file in $currentZipFiles
           do
-              echo "$currentDir/$file\n" >> "${GITHUB_OUTPUT}"
+              echo "$currentDir/$file" >> "${GITHUB_OUTPUT}"
           done
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
 
