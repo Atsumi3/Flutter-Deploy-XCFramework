@@ -1,0 +1,10 @@
+name: flutter_module_for_native
+
+sdkPath: .fvm/flutter_sdk
+
+packages:
+  - packages/*
+
+scripts:
+  analyze:
+    exec: dart analyze .

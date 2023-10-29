@@ -1,0 +1,66 @@
+name: "Deploy iOS XCFramework"
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Release Tag"
+        required: true
+        default: "v1.0.0"
+
+env:
+  OUTPUT_PATH: ${{ github.workspace }}/ios-framework
+
+jobs:
+  deploy-ios-xcframework:
+    runs-on: macos-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: Atsumi3/actions-setup-fvm@0.0.2
+
+      - name: build
+        working-directory: packages/native_module
+        run: |
+          fvm flutter pub get
+          fvm flutter build ios-framework --no-debug --no-profile --xcframework
+
+      - name: ZIP Archive
+        working-directory: packages/native_module/build/ios/framework/Release
+        run: |
+          mkdir -p $OUTPUT_PATH
+          for dir in *; do
+            zip -r $OUTPUT_PATH/$dir.zip $dir
+          done
+
+      - name: Extract ZIP file lists
+        id: extract_zip_file_lists
+        run: |
+          ZIPFILES=$(find $OUTPUT_PATH -name "*.zip")
+          ZIPFILES_NL=$(echo "$ZIPFILES" | tr '\n' '\\n')
+          echo "ZIPFILES_NL: $ZIPFILES_NL" >> $GITHUB_OUTPUT
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        id: create_release
+        with:
+          name: ${{ github.event.inputs.release_tag }}
+          tag_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+          files: |
+            ${{ steps.extract_zip_file_lists.outputs.ZIPFILES_NL }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    #   - name: Commit & Push & Pull Request
+    #     uses: EndBug/add-and-commit@v7
+    #     with:
+    #       author_name: ${{ github.actor }}
+    #       author_email: ${{ github.actor }}@users.noreply.github.com
+    #       message: "Update Package.swift"
+    #       add: "Package.swift"
+    #       push: true
+    #     env:
+    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
