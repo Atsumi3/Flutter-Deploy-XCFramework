@@ -1,0 +1,25 @@
+name: native_module
+description: A new Flutter module project.
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: '>=3.1.4 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  native_plugin:
+    path: ../native_plugin
+
+dev_dependencies:
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+
+  module:
+    androidX: true
+    androidPackage: com.example.flutter_module_for_native
+    iosBundleIdentifier: com.example.flutterModuleForNative
