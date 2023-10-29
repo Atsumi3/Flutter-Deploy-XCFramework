@@ -9,6 +9,7 @@ on:
         default: "v1.0.0"
 
 env:
+  SDK_NAME: "AppPackage"
   OUTPUT_PATH: ${{ github.workspace }}/ios-framework
 
 jobs:
@@ -61,13 +62,74 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    #   - name: Commit & Push & Pull Request
-    #     uses: EndBug/add-and-commit@v7
-    #     with:
-    #       author_name: ${{ github.actor }}
-    #       author_email: ${{ github.actor }}@users.noreply.github.com
-    #       message: "Update Package.swift"
-    #       add: "Package.swift"
-    #       push: true
-    #     env:
-    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Package.swift
+        working-directory: ${{ env.OUTPUT_PATH }}
+        run: |
+          # フォルダ内の.zipファイルを配列で取得する
+          assetsFiles=($(ls *.zip))
+
+          # Package.swiftのproducts/libraryに入れる内容
+          PACKAGE_TARGETS=()
+          for file in "${assetsFiles[@]}"; do
+            # .xcframework.zipを削除し""で囲む
+            # PACKAGE_TARGETS+=("$(echo $file | sed -e 's/.xcframework.zip//g')")
+            ASSET_FILE_NAME=$(echo $file | sed -e 's/.xcframework.zip//g')
+            ASSET_FILE_NAME=("\"$ASSET_FILE_NAME\"")
+            PACKAGE_TARGETS+=($ASSET_FILE_NAME)
+          done
+          PACKAGE_TARGETS=$(IFS=,; echo "${PACKAGE_TARGETS[*]}")
+          PACKAGE_TARGETS=$(echo $PACKAGE_TARGETS | sed -e 's/,/,\
+          /g')
+
+          fileUrl="https://github.com/Atsumi3/Flutter-Deploy-XCFramework/releases/download/${{ github.event.inputs.release_tag }}/"
+
+          # Package.swiftのtargetsに入れる内容
+          PACKAGE_BINARY_TARGETS=()
+          for file in "${assetsFiles[@]}"; do
+            FILENAME_WITHOUT_EXT=$(echo $file | sed -e 's/.xcframework.zip//g')
+            URL="$fileUrl$file"
+            CHECKSUM=$(shasum -a 256 $file | sed -e 's/ .*//g')
+            BINARY_TARGET=$(cat <<EOF
+
+                .binaryTarget(
+                  name: "$FILENAME_WITHOUT_EXT",
+                  url: "$URL",
+                  checksum: "$CHECKSUM"
+                )
+          EOF
+              )
+            PACKAGE_BINARY_TARGETS+=("$BINARY_TARGET")
+          done
+          PACKAGE_BINARY_TARGETS=$(IFS=,; echo "${PACKAGE_BINARY_TARGETS[*]}")
+
+          # Package.swiftを作成する
+          packageSwift=$(cat <<EOF
+          // swift-tools-version:5.9
+          import PackageDescription
+
+          let package = Package(
+              name: "$SDK_NAME",
+              platforms: [.iOS(.v14)],
+              products: [
+                .library(
+                  name: "$SDK_NAME",
+                  targets: [
+                    $PACKAGE_TARGETS
+                  ]
+                )
+              ],
+              targets: [
+                $PACKAGE_BINARY_TARGETS
+              ],
+              swiftLanguageVersions: [.v5]
+          )
+          EOF
+          )
+
+          echo "$packageSwift" > Package.swift
+
+      - name: Save Package.swift
+        uses: actions/upload-artifact@v2
+        with:
+          name: Package.swift
+          path: ${{ env.OUTPUT_PATH }}/Package.swift
