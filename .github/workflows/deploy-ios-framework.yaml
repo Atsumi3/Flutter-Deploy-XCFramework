@@ -10,13 +10,21 @@ env:
   OUTPUT_PATH: ${{ github.workspace }}/ios-framework
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   deploy-ios-xcframework:
     runs-on: macos-latest
     timeout-minutes: 20
-    environment: Release
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: workaround for detached HEAD
+        run: git checkout ${{github.head_ref}} && git pull
 
       - uses: Atsumi3/actions-setup-fvm@0.0.2
 
