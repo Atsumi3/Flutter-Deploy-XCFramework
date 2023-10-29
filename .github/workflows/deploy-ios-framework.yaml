@@ -35,11 +35,18 @@ jobs:
           done
 
       - name: Extract ZIP file lists
+        working-directory: ${{ env.OUTPUT_PATH }}
         id: extract_zip_file_lists
         run: |
-          ZIPFILES=$(find $OUTPUT_PATH -name "*.zip")
-          ZIPFILES_NL=$(echo "$ZIPFILES" | tr '\n' '\\n')
-          echo "ZIPFILES_NL: $ZIPFILES_NL" >> $GITHUB_OUTPUT
+          currentDir=$(pwd)
+          currentZipFiles=$(ls *.zip)
+          zipFiles=""
+          for file in $currentZipFiles
+          do
+              zipFiles="$zipFiles $currentDir/$file"
+          done
+          zipFiles=$(echo $zipFiles | sed 's/ /\\n/g')
+          echo "ZIPFILES_NL: $zipFiles" >> $GITHUB_OUTPUT
 
       - name: Release
         uses: softprops/action-gh-release@v1
