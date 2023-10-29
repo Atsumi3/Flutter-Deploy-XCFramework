@@ -2,11 +2,6 @@ name: "Deploy iOS XCFramework"
 
 on:
   workflow_dispatch:
-    inputs:
-      release_tag:
-        description: "Release Tag"
-        required: false
-        default: ""
 
 env:
   SDK_NAME: "AppPackage"
@@ -24,12 +19,7 @@ jobs:
 
       - name: Set ReleaseTag
         id: release_tag
-        run: |
-          if [ -z "${{ github.event.inputs.release_tag }}" ]; then
-            echo "RELEASE_TAG=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_OUTPUT
-          else
-            echo "RELEASE_TAG=${{ github.event.inputs.release_tag }}" >> $GITHUB_OUTPUT
-          fi
+        run: echo "RELEASE_TAG=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_OUTPUT
 
       - name: build
         working-directory: packages/native_module
