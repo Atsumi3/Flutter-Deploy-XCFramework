@@ -76,7 +76,7 @@ jobs:
       - name: Set Stored File URL
         id: set_stored_file_url
         run: |
-          fileUrl="https://github.com/${{ github.repository }}/releases/download/${{ github.event.inputs.release_tag }}/"
+          fileUrl="https://github.com/${{ github.repository }}/releases/download/${{ steps.release_tag.outputs.RELEASE_TAG }}/"
           echo "FILE_URL=$fileUrl" >> "${GITHUB_OUTPUT}"
 
       - name: Create Package.swift
