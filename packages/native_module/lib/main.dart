@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:native_plugin/native_plugin_method_channel.dart';
+import 'package:native_plugin/native_plugin_platform_interface.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatefulWidget {
 class _Myapp extends State<MyApp> {
   @override
   void initState() {
-    NativePlugin().setupNativeChannel();
+    NativePluginPlatform.instance.setupNativeChannel();
     super.initState();
   }
 
