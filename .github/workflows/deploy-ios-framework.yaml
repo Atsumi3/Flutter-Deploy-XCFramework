@@ -2,6 +2,11 @@ name: "Deploy iOS XCFramework"
 
 on:
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Release Version"
+        required: true
+        default: "1.0.0"
 
 env:
   SDK_NAME: "AppPackage"
@@ -25,10 +30,6 @@ jobs:
         run: git checkout ${{github.head_ref}} && git pull
 
       - uses: Atsumi3/actions-setup-fvm@0.0.2
-
-      - name: Set ReleaseTag
-        id: release_tag
-        run: echo "RELEASE_TAG=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_OUTPUT
 
       - name: build
         working-directory: packages/native_module
@@ -63,8 +64,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         id: create_release
         with:
-          name: ${{ steps.release_tag.outputs.RELEASE_TAG }}
-          tag_name: ${{ steps.release_tag.outputs.RELEASE_TAG }}
+          name: ${{ github.event.inputs.release_tag }}
+          tag_name: ${{ github.event.inputs.release_tag }}
           files: ${{ steps.extract_zip_file_lists.outputs.ZIPFILES }}
           draft: false
           prerelease: false
@@ -74,7 +75,7 @@ jobs:
       - name: Set Stored File URL
         id: set_stored_file_url
         run: |
-          fileUrl="https://github.com/${{ github.repository }}/releases/download/${{ steps.release_tag.outputs.RELEASE_TAG }}/"
+          fileUrl="https://github.com/${{ github.repository }}/releases/download/${{ github.event.inputs.release_tag }}/"
           echo "FILE_URL=$fileUrl" >> "${GITHUB_OUTPUT}"
 
       - name: Create Package.swift
@@ -145,11 +146,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # ${{ steps.release_tag.outputs.RELEASE_TAG }} のスペースを_に置換
-          release_tag=$(echo "${{ steps.release_tag.outputs.RELEASE_TAG }}" | sed -e 's/ /_/g')
+          release_tag=$(echo "${{ github.event.inputs.release_tag }}" | sed -e 's/ /_/g')
           git switch -c bot/$release_tag
           git add Package.swift
-          git commit -m "Update Pacakge.swift ${{ steps.release_tag.outputs.RELEASE_TAG }}"
+          git commit -m "Update Pacakge.swift ${{ github.event.inputs.release_tag }}"
           git push -u origin bot/$release_tag
 
       - name: Check PullRequest Exists
