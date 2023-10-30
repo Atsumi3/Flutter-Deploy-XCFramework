@@ -19,23 +19,23 @@ let package = Package(
       
       .binaryTarget(
         name: "App",
-        url: "https://github.com/Atsumi3/Flutter-Deploy-XCFramework/releases/download/1.0.3/App.xcframework.zip",
-        checksum: "574c4464bdc50914217fbb27f7926fd00b567aa687cd205f3b68a1e2835ae38f"
+        url: "https://github.com/Atsumi3/Flutter-Deploy-XCFramework/releases/download/1.0.4/App.xcframework.zip",
+        checksum: "a66b745342ea2f8e26c3cef102ea2c0a363f44ad0835e15c04ec835a3532d6ff"
       ),
       .binaryTarget(
         name: "Flutter",
-        url: "https://github.com/Atsumi3/Flutter-Deploy-XCFramework/releases/download/1.0.3/Flutter.xcframework.zip",
-        checksum: "c42acc546b2b63fe421b887f828922edb13c442efabb9fdb73689212c16f66f9"
+        url: "https://github.com/Atsumi3/Flutter-Deploy-XCFramework/releases/download/1.0.4/Flutter.xcframework.zip",
+        checksum: "761c4bcbf0d24d2d7fb339c729222fc0a26ee8da946e4d01525ea12c51c31186"
       ),
       .binaryTarget(
         name: "FlutterPluginRegistrant",
-        url: "https://github.com/Atsumi3/Flutter-Deploy-XCFramework/releases/download/1.0.3/FlutterPluginRegistrant.xcframework.zip",
-        checksum: "2529545e28ec934327126dabf2147f63f6fce0fe9d109fb06d2fcda283504c30"
+        url: "https://github.com/Atsumi3/Flutter-Deploy-XCFramework/releases/download/1.0.4/FlutterPluginRegistrant.xcframework.zip",
+        checksum: "5f5304df402b6ebcb02ed20ca14f6aad2b61fcb7a3df7d78f6a75a0929a3cb14"
       ),
       .binaryTarget(
         name: "native_plugin",
-        url: "https://github.com/Atsumi3/Flutter-Deploy-XCFramework/releases/download/1.0.3/native_plugin.xcframework.zip",
-        checksum: "b82c9ca5ee23031f450c925eb632d4cc6092362577ecbd8050c8a2e67bf42994"
+        url: "https://github.com/Atsumi3/Flutter-Deploy-XCFramework/releases/download/1.0.4/native_plugin.xcframework.zip",
+        checksum: "20a9867e44f8f802066efc3db8a60e511515fc38775558bc895213c137c1d5f7"
       )
     ],
     swiftLanguageVersions: [.v5]
