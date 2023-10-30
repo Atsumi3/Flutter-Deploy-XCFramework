@@ -4,7 +4,7 @@ import UIKit
 public final class NativePlugin: NSObject, FlutterPlugin {
 
     private let channel: FlutterMethodChannel
-    static var instance: NativePlugin!
+    public static var instance: NativePlugin!
 
     private static let channelName = "native_plugin"
 
@@ -25,7 +25,7 @@ public final class NativePlugin: NSObject, FlutterPlugin {
         result(FlutterMethodNotImplemented)
     }
 
-    func getMessageFromFlutter(result: @escaping (String?) -> Void) {
+    public func getMessageFromFlutter(result: @escaping (String?) -> Void) {
         channel.invokeMethod("getMessageFromFlutter", arguments: nil) { (r) in
             result(r as? String)
         }
