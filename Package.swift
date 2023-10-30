@@ -19,23 +19,23 @@ let package = Package(
       
       .binaryTarget(
         name: "App",
-        url: "https://github.com/Atsumi3/Flutter-Deploy-XCFramework/releases/download/20231029165733/App.xcframework.zip",
-        checksum: "ffa0341ebee959a06d40d17ce6273c72d28d2199f66938f2139301ff27994782"
+        url: "https://github.com/Atsumi3/Flutter-Deploy-XCFramework/releases/download/1.0.2/App.xcframework.zip",
+        checksum: "7766b1054b36d40859435f0ed2c601ddd4aeb324f8537b896dbb2b74434497da"
       ),
       .binaryTarget(
         name: "Flutter",
-        url: "https://github.com/Atsumi3/Flutter-Deploy-XCFramework/releases/download/20231029165733/Flutter.xcframework.zip",
-        checksum: "92d52ee6c23cc56255385796cfaddf9ffa557341694d938c30d637450bb3a2b1"
+        url: "https://github.com/Atsumi3/Flutter-Deploy-XCFramework/releases/download/1.0.2/Flutter.xcframework.zip",
+        checksum: "7452a63c796fc0779629ea13c0967de04adc03d4e71da8bdc8c5cbd16b77e63f"
       ),
       .binaryTarget(
         name: "FlutterPluginRegistrant",
-        url: "https://github.com/Atsumi3/Flutter-Deploy-XCFramework/releases/download/20231029165733/FlutterPluginRegistrant.xcframework.zip",
-        checksum: "cf87d9bc1632e5c95ac5f8e531b9b80abae34bcbf30dce130cd849fad6fcbc73"
+        url: "https://github.com/Atsumi3/Flutter-Deploy-XCFramework/releases/download/1.0.2/FlutterPluginRegistrant.xcframework.zip",
+        checksum: "60c376d31525620ece3e0d1d3369db03b5f72e7f289192b194b3ade21f0927e2"
       ),
       .binaryTarget(
         name: "native_plugin",
-        url: "https://github.com/Atsumi3/Flutter-Deploy-XCFramework/releases/download/20231029165733/native_plugin.xcframework.zip",
-        checksum: "47dd675637107d25525361ec6cb5798a6a989ca27b8d3f345183e2e6560e16fa"
+        url: "https://github.com/Atsumi3/Flutter-Deploy-XCFramework/releases/download/1.0.2/native_plugin.xcframework.zip",
+        checksum: "6ed96f98fff07209b1845275915d8f17d6ed65f66d059958e127d67d700ba8e9"
       )
     ],
     swiftLanguageVersions: [.v5]
