@@ -36,7 +36,7 @@ jobs:
         working-directory: packages/native_module
         run: |
           fvm flutter pub get
-          fvm flutter build ios-framework --no-debug --no-profile --xcframework
+          fvm flutter build ios-framework --no-debug --no-profile --xcframework --no-tree-shake-icons
 
       - name: ZIP Archive
         working-directory: packages/native_module/build/ios/framework/Release

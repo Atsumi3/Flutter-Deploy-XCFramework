@@ -17,6 +17,12 @@
       <excludeFolder url="file://$MODULE_DIR$/macos/Flutter" />
       <excludeFolder url="file://$MODULE_DIR$/macos/Pods" />
       <excludeFolder url="file://$MODULE_DIR$/macos/.symlinks" />
+      <excludeFolder url="file://$MODULE_DIR$/.ios/.symlinks/plugins/native_plugin/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/.ios/.symlinks/plugins/native_plugin/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/.ios/.symlinks/plugins/native_plugin/build" />
+      <excludeFolder url="file://$MODULE_DIR$/.ios/.symlinks/plugins/native_plugin/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/.ios/.symlinks/plugins/native_plugin/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/.ios/.symlinks/plugins/native_plugin/example/build" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Dart SDK" level="project" />
